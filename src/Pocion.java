@@ -1,21 +1,21 @@
 /**
  * Item consumible que restaura estadísticas del personaje.
- * Puede ser de tipo "VIDA" o "MANA".
+ * Utiliza un Enum para definir si afecta a la Vida o al Maná.
  *
  * @author Javier Fernández Gavino
- * @version 1.0
+ * @version 1.1
  */
 public class Pocion extends Item {
     private double cantidad;
-    private String tipo; // "VIDA" o "MANA"
+    private TipoPocion tipo; // VIDA o MANA
 
     /**
      * Crea una poción.
      * @param nombre Nombre (ej: "Poción Menor").
      * @param cantidad Puntos que restaura.
-     * @param tipo Tipo de efecto ("VIDA" o "MANA").
+     * @param tipo El tipo de estadística que restaura (TipoPocion.VIDA o TipoPocion.MANA).
      */
-    public Pocion(String nombre, double cantidad, String tipo) {
+    public Pocion(String nombre, double cantidad, TipoPocion tipo) {
         super(nombre);
         this.cantidad = cantidad;
         this.tipo = tipo;
@@ -23,31 +23,31 @@ public class Pocion extends Item {
 
     /**
      * Usa la poción sobre un personaje.
-     * - VIDA: Cura a cualquier personaje.
-     * - MANA: Solo funciona en Magos.
-     * @param objetivo Personaje que consume la poción.
      * @return true si la poción tuvo efecto (y debe gastarse), false si no.
      */
     @Override
     public boolean usarItem(Personaje objetivo) {
-        if (tipo.equalsIgnoreCase("VIDA")) {
-            double vidaAntes = objetivo.getPuntosVida();
-            objetivo.setPuntosVida(vidaAntes + cantidad);
-            System.out.println(objetivo.getNombre() + " bebe " + getNombre() + " y se cura.");
-            return true; // ÉXITO
-        }
-        else if (tipo.equalsIgnoreCase("MANA")) {
-            if (objetivo instanceof Mago) {
-                Mago m = (Mago) objetivo;
-                m.recuperarMana(cantidad);
-                System.out.println(objetivo.getNombre() + " bebe una poción de maná.");
+        switch (tipo) {
+            case VIDA:
+                double vidaAntes = objetivo.getPuntosVida();
+                objetivo.setPuntosVida(vidaAntes + cantidad);
+                System.out.println(objetivo.getNombre() + " bebe " + getNombre() + " y se cura.");
                 return true; // ÉXITO
-            } else {
-                System.out.println(objetivo.getNombre() + " intenta beber el maná pero no tiene efecto (No es mago).");
-                return false; // FALLO: No gastar
-            }
+
+            case MANA:
+                if (objetivo instanceof Mago) {
+                    Mago m = (Mago) objetivo;
+                    m.recuperarMana(cantidad);
+                    System.out.println(objetivo.getNombre() + " bebe una poción de maná.");
+                    return true; // ÉXITO
+                } else {
+                    System.out.println(objetivo.getNombre() + " intenta beber el maná pero no tiene efecto (No es mago).");
+                    return false; // FALLO
+                }
+
+            default:
+                return false;
         }
-        return false;
     }
 
     @Override
