@@ -27,6 +27,10 @@ public class Picaro extends Personaje {
     }
 
     // --- Getters y Setters Específicos ---
+    public int getEnergia() {
+        return energia;
+    }
+
     public void setEnergia(int energia) {
         this.energia = Math.max(0, Math.min(energiaMaxima, energia));
     }

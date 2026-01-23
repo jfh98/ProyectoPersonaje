@@ -18,7 +18,11 @@ public class Mago extends Personaje {
         this.puntosManaMax = 100;
         this.puntosMana = 100;
     }
+    public double getPuntosMana() { return puntosMana; }
 
+    public void setPuntosMana(double puntosMana) {
+        this.puntosMana = Math.max(0, Math.min(puntosManaMax, puntosMana));
+    }
     /**
      * Restaura puntos de maná sin exceder el máximo.
      * @param cantidad Cantidad de maná a recuperar.
