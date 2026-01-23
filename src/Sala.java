@@ -4,21 +4,22 @@
  *
  * @author Rafa Navarro
  * @since 2026.01.23
+ * @version 1.1
  */
 public class Sala {
 
     /**
-     * Tipo de efecto ambiental de la sala (ESCARCHA, NIEBLA, BENDICION, NORMAL).
+     * Tipo de efecto ambiental (CAMBIADO A ENUM).
      */
-    private String tipo;
+    private TipoSala tipo;
     /**
      * Descripción del efecto ambiental.
      */
     private String descripcion;
     /**
-     * Dificultad de la sala (FÁCIL, MEDIA, DIFÍCIL).
+     * Dificultad de la sala (CAMBIADO A ENUM).
      */
-    private String dificultad;
+    private Dificultad dificultad;
     /**
      * Nivel sugerido para el jugador en esta sala.
      */
@@ -36,13 +37,13 @@ public class Sala {
          * Asignación de Dificultad y Nivel Sugerido.
          */
         if (numeroSala == 1) {
-            this.dificultad = "FÁCIL";
+            this.dificultad = Dificultad.FACIL; // Antes "FÁCIL"
             this.nivelSugerido = Math.max(1, nivelJugador - 2);
         } else if (numeroSala == 2) {
-            this.dificultad = "MEDIA";
+            this.dificultad = Dificultad.MEDIA; // Antes "MEDIA"
             this.nivelSugerido = nivelJugador;
         } else {
-            this.dificultad = "DIFÍCIL";
+            this.dificultad = Dificultad.DIFICIL; // Antes "DIFÍCIL"
             this.nivelSugerido = nivelJugador + 2;
         }
 
@@ -52,19 +53,19 @@ public class Sala {
         int azar = (int) (Math.random() * 4);
         switch (azar) {
             case 0:
-                this.tipo = "ESCARCHA";
+                this.tipo = TipoSala.ESCARCHA; // Antes "ESCARCHA"
                 this.descripcion = "Un frío sepulcral que congela tus reservas.";
                 break;
             case 1:
-                this.tipo = "NIEBLA";
+                this.tipo = TipoSala.NIEBLA;   // Antes "NIEBLA"
                 this.descripcion = "Vapores venenosos que corroen tu piel.";
                 break;
             case 2:
-                this.tipo = "BENDICION";
+                this.tipo = TipoSala.BENDICION;// Antes "BENDICION"
                 this.descripcion = "Un rayo de luz celestial que purifica tus heridas.";
                 break;
             default:
-                this.tipo = "NORMAL";
+                this.tipo = TipoSala.NORMAL;   // Antes "NORMAL"
                 this.descripcion = "Una estancia de piedra fría sin peligros aparentes.";
                 break;
         }
@@ -77,7 +78,8 @@ public class Sala {
     public Enemigo generarEnemigo() {
         double probabilidad = Math.random();
 
-        if (this.dificultad.equals("FÁCIL")) {
+        // Comparamos directamente con el Enum usando ==
+        if (this.dificultad == Dificultad.FACIL) {
             /**
              * 80% Orco, 15% Espectro, 5% Jefe
              */
@@ -85,7 +87,7 @@ public class Sala {
             if (probabilidad < 0.20) return new Enemigo("Espectro Débil", nivelSugerido + 1);
             return new Enemigo("Orco Raso", nivelSugerido);
 
-        } else if (this.dificultad.equals("MEDIA")) {
+        } else if (this.dificultad == Dificultad.MEDIA) {
             /**
              * 50% Orco, 35% Espectro, 15% Jefe
              */
@@ -110,8 +112,10 @@ public class Sala {
      */
     public void aplicarEfecto(Personaje p) {
         System.out.println("\n--- [SALA " + dificultad + "]: " + descripcion + " ---");
+
+        // Switch sobre el Enum (no hace falta poner TipoSala.ESCARCHA, Java lo entiende)
         switch (this.tipo) {
-            case "ESCARCHA":
+            case ESCARCHA:
                 if (p instanceof Mago) {
                     Mago m = (Mago) p;
                     m.setPuntosMana(m.getPuntosMana() - 15);
@@ -121,10 +125,10 @@ public class Sala {
                     System.out.println("   * El frío drena 15 de Energía.");
                 }
                 break;
-            case "NIEBLA":
+            case NIEBLA:
                 p.recibirDanio(10);
                 break;
-            case "BENDICION":
+            case BENDICION:
                 p.setPuntosVida(p.getPuntosVida() + 15);
                 System.out.println("   * La luz restaura 15 PV.");
                 break;
@@ -133,10 +137,9 @@ public class Sala {
 
     /**
      * Getters de la sala.
-     *
-     * @return tipo, descripcion, dificultad, nivelSugerido
+     * @return Atributos de la sala.
      */
-    public String getTipo() {
+    public TipoSala getTipo() {
         return tipo;
     }
 
@@ -144,14 +147,13 @@ public class Sala {
         return descripcion;
     }
 
-    public String getDificultad() {
+    public Dificultad getDificultad() {
         return dificultad;
     }
 
     public int getNivelSugerido() {
         return nivelSugerido;
     }
-
 
     /**
      * Representación en cadena de la sala.
@@ -161,9 +163,9 @@ public class Sala {
     @Override
     public String toString() {
         return "Sala{" +
-                "tipo='" + tipo + '\'' +
+                "tipo=" + tipo + // Se imprime el nombre del Enum automáticamente
                 ", descripcion='" + descripcion + '\'' +
-                ", dificultad='" + dificultad + '\'' +
+                ", dificultad=" + dificultad +
                 ", nivelSugerido=" + nivelSugerido +
                 '}';
     }
