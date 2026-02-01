@@ -98,14 +98,16 @@ public class GestorMisiones {
      *
      * @return true si la misión se completó y se entregó la recompensa; false si se abandonó o no había misión.
      */
+    // EN GESTORMISIONES.JAVA
+
     public boolean finalizarMision() {
         boolean res = false;
+        // Solo si existe y está lista para entregar, la cobramos y borramos
         if (!comprobarSiMisionEsNula() && misionActual.estaListaParaEntregar()) {
             misionActual.entregarRecompensa(jugador);
             misionActual = null;
             res = true;
-        } else if (!comprobarSiMisionEsNula() && !misionActual.estaListaParaEntregar())
-            misionActual = null; // Permite abandonar la misión si no está completa
+        }
         return res;
     }
     /**

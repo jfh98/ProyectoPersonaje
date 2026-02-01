@@ -18,12 +18,12 @@ public class Picaro extends Personaje {
      * @param arma1 Arma de mano derecha (puede ser null).
      * @param arma2 Arma de mano izquierda (puede ser null).
      */
-    public Picaro(String nombre, int energiaMaxima, Arma arma1, Arma arma2) {
-        super(nombre, 1, 100, 3); // Vida media, defensa media
-        this.energiaMaxima = energiaMaxima;
-        this.energia = energiaMaxima;
+    public Picaro(String nombre, Arma arma1, Arma arma2) {
+        super(nombre, 1, 100, 3);
         this.arma1 = arma1;
         this.arma2 = arma2;
+        this.energiaMaxima = 50;
+        this.energia = energiaMaxima;
     }
 
     // --- Getters y Setters Específicos ---
